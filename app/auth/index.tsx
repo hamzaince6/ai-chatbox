@@ -20,13 +20,21 @@ const AuthScreen = () => {
           </View>
           
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>Log in</Text>
-            </TouchableOpacity>
+            <LinearGradient
+              colors={['#7E92F8', '#6972F0']}
+              style={styles.loginButton}
+            >
+              <TouchableOpacity 
+                style={styles.loginButtonTouchable}
+                onPress={() => router.push('/auth/login/signin')}
+              >
+                <Text style={styles.loginButtonText}>Log in</Text>
+              </TouchableOpacity>
+            </LinearGradient>
             
             <TouchableOpacity 
               style={styles.signupButton}
-              onPress={() => router.push('/auth/signup')}
+              onPress={() => router.push('/auth/create-account/signup')}
             >
               <Text style={styles.signupButtonText}>Sign up</Text>
             </TouchableOpacity>
@@ -90,11 +98,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   loginButton: {
-    backgroundColor: 'transparent',
-    backgroundImage: 'linear-gradient(180deg, #7E92F8 0%, #6972F0 100%)',
+    width: '100%',
+    borderRadius: 100,
+  },
+  loginButtonTouchable: {
     width: '100%',
     padding: 16,
-    borderRadius: 100,
     alignItems: 'center',
   },
   loginButtonText: {

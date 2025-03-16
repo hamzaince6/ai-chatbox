@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Background -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7E92F8"/>
+      <stop offset="100%" stop-color="#6972F0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="248" fill="url(#paint0_linear)" stroke="white" stroke-width="16"/>
+  
+  <!-- Chat Bubble -->
+  <path d="M384 176C384 149.49 373.37 124.18 354.33 105.13C335.28 86.09 309.97 75.46 283.46 75.46H228.54C202.03 75.46 176.72 86.09 157.67 105.13C138.63 124.18 128 149.49 128 176V272C128 298.51 138.63 323.82 157.67 342.87C176.72 361.91 202.03 372.54 228.54 372.54H283.46C309.97 372.54 335.28 361.91 354.33 342.87C373.37 323.82 384 298.51 384 272V176Z" 
+    fill="white" stroke="white" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- AI Symbol -->
+  <path d="M256 160L304 240H208L256 160Z" fill="#7E92F8" stroke="#7E92F8" stroke-width="8"/>
+  <circle cx="256" cy="280" r="24" fill="#7E92F8"/>
+</svg> 

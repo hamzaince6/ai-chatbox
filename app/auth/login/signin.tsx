@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import { FontAwesome, AntDesign, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SignUpScreen = () => {
+const SignInScreen = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [agreed, setAgreed] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isFocusedEmail, setIsFocusedEmail] = useState(false);
-  const [isFocusedPassword, setIsFocusedPassword] = useState(false);
 
-  const handleContinue = () => {
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      // Add style to remove outline on web inputs
+      const style = document.createElement('style');
+      style.textContent = `
+        input:focus {
+          outline: none !important;
+        }
+      `;
+      document.head.appendChild(style);
+      return () => {
+        document.head.removeChild(style);
+      };
+    }
+  }, []);
+
+  const handleSignIn = () => {
     if (!email.trim()) {
-      toast.error('Lütfen email adresinizi giriniz', {
+      toast.error('Email alanı zorunludur', {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -28,7 +41,7 @@ const SignUpScreen = () => {
     }
 
     if (!password.trim()) {
-      toast.error('Lütfen şifrenizi giriniz', {
+      toast.error('Şifre alanı zorunludur', {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -39,20 +52,8 @@ const SignUpScreen = () => {
       return;
     }
 
-    if (!agreed) {
-      toast.error('Lütfen kullanım koşullarını kabul ediniz', {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      return;
-    }
-
-    // Tüm validasyonlar başarılı
-    toast.success('Tüm validasyonlar başarılı, kayıt işlemine devam ediliyor...', {
+    // Başarılı giriş durumunda
+    toast.success('Giriş başarılı! Yönlendiriliyorsunuz...', {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
@@ -60,9 +61,17 @@ const SignUpScreen = () => {
       pauseOnHover: true,
       draggable: true,
       onClose: () => {
-        router.push('/auth/complete-profile');
+        router.replace('/tabs/home');
       }
     });
+  };
+
+  const handleForgotPassword = () => {
+    router.push('/auth/password-reset/forgot-password');
+  };
+
+  const handleSignUp = () => {
+    router.push('/auth/create-account/signup');
   };
 
   return (
@@ -73,22 +82,24 @@ const SignUpScreen = () => {
         style={styles.keyboardView}
       >
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.push('/auth')} style={styles.backButton}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="chevron-back" size={28} color="#1A1A1A" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.content}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Hello there <Text>👋</Text></Text>
-            <Text style={styles.subtitle}>Please enter your email & password to create an account.</Text>
+            <Text style={styles.title}>Welcome back 👋</Text>
+            <Text style={styles.subtitle}>
+              Please enter your email & password to log in.
+            </Text>
           </View>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Email address</Text>
               <TextInput
-                style={[styles.input, isFocusedEmail && styles.inputFocused]}
+                style={styles.input}
                 placeholder="Email"
                 placeholderTextColor="#999"
                 value={email}
@@ -97,16 +108,14 @@ const SignUpScreen = () => {
                 autoCapitalize="none"
                 selectionColor="#7C3AED"
                 cursorColor="#7C3AED"
-                onFocus={() => setIsFocusedEmail(true)}
-                onBlur={() => setIsFocusedEmail(false)}
               />
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Password</Text>
-              <View style={[styles.passwordContainer, isFocusedPassword && styles.inputFocused]}>
+              <View style={styles.passwordContainer}>
                 <TextInput
-                  style={[styles.input, styles.passwordInput]}
+                  style={styles.passwordInput}
                   placeholder="Password"
                   placeholderTextColor="#999"
                   value={password}
@@ -114,63 +123,56 @@ const SignUpScreen = () => {
                   secureTextEntry={!showPassword}
                   selectionColor="#7C3AED"
                   cursorColor="#7C3AED"
-                  onFocus={() => setIsFocusedPassword(true)}
-                  onBlur={() => setIsFocusedPassword(false)}
                 />
                 <TouchableOpacity 
-                  style={styles.eyeIcon}
+                  style={styles.eyeButton}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="#999" />
+                  <Ionicons 
+                    name={showPassword ? "eye-off" : "eye"} 
+                    size={24} 
+                    color="#7C3AED" 
+                  />
                 </TouchableOpacity>
               </View>
             </View>
 
             <TouchableOpacity 
-              style={styles.checkbox}
-              onPress={() => setAgreed(!agreed)}
+              style={styles.forgotPassword}
+              onPress={handleForgotPassword}
             >
-              <View style={[styles.checkboxBox, agreed && styles.checkboxChecked]}>
-                {agreed && <Ionicons name="checkmark" size={18} color="white" />}
-              </View>
-              <Text style={styles.checkboxText}>
-                I agree to Qubiko AI{' '}
-                <Text style={styles.link}>Public Agreement</Text>,{' '}
-                <Text style={styles.link}>Terms</Text>, &{' '}
-                <Text style={styles.link}>Privacy Policy</Text>.
-              </Text>
+              <Text style={styles.forgotPasswordText}>Forgot password?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
-              style={styles.continueButton}
-              onPress={handleContinue}
+              style={styles.signInButton}
+              onPress={handleSignIn}
             >
-              <Text style={styles.continueButtonText}>Continue</Text>
+              <Text style={styles.signInButtonText}>Log in</Text>
             </TouchableOpacity>
 
-            <View style={styles.loginSection}>
-              <Text style={styles.loginText}>Already have an account?{' '}
-                <Text style={styles.loginLink} onPress={() => router.push('/auth')}>Log in</Text>
-              </Text>
+            <View style={styles.signupContainer}>
+              <Text style={styles.signupText}>Don't have an account? </Text>
+              <TouchableOpacity onPress={handleSignUp}>
+                <Text style={styles.signupLink}>Sign up</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.dividerContainer}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.orText}>or continue with</Text>
-              <View style={styles.dividerLine} />
+              <View style={styles.divider} />
+              <Text style={styles.dividerText}>or continue with</Text>
+              <View style={styles.divider} />
             </View>
 
             <View style={styles.socialButtonsContainer}>
               <TouchableOpacity style={styles.socialButton}>
-                <AntDesign name="google" size={24} color="#DB4437" />
+                <Ionicons name="logo-google" size={24} color="#DB4437" />
               </TouchableOpacity>
-              
               <TouchableOpacity style={styles.socialButton}>
-                <AntDesign name="apple1" size={24} color="black" />
+                <Ionicons name="logo-apple" size={24} color="#000000" />
               </TouchableOpacity>
-              
               <TouchableOpacity style={styles.socialButton}>
-                <FontAwesome name="facebook" size={24} color="#4267B2" />
+                <Ionicons name="logo-facebook" size={24} color="#4267B2" />
               </TouchableOpacity>
             </View>
           </View>
@@ -205,22 +207,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleContainer: {
-    marginBottom: 40,
-    paddingTop: 40,
+    marginBottom: 32,
   },
   title: {
     fontSize: 32,
     fontWeight: '600',
     color: '#1A1A1A',
     marginBottom: 12,
-    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     color: '#666666',
     lineHeight: 24,
-    textAlign: 'center',
-    paddingHorizontal: 20,
   },
   form: {
     gap: 24,
@@ -242,114 +240,86 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'transparent',
   },
-  inputFocused: {
-    borderColor: '#7C3AED',
-    borderWidth: 1,
-  },
   passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#F8F9FA',
     borderRadius: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: 'transparent',
   },
   passwordInput: {
     flex: 1,
-    paddingRight: 50,
-  },
-  eyeIcon: {
-    position: 'absolute',
-    right: 16,
-    padding: 8,
-  },
-  checkbox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginTop: 12,
-    marginBottom: 32,
-  },
-  checkboxBox: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: '#7C3AED',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: '#7C3AED',
-  },
-  checkboxText: {
-    flex: 1,
-    fontSize: 14,
-    color: '#1A1A1A',
-    lineHeight: 20,
-  },
-  link: {
-    color: '#7C3AED',
-    textDecorationLine: 'underline',
-  },
-  continueButton: {
-    backgroundColor: '#7C3AED',
-    borderRadius: 12,
     padding: 16,
+    fontSize: 16,
+    color: '#1A1A1A',
+  },
+  eyeButton: {
+    padding: 16,
+  },
+  forgotPassword: {
     alignItems: 'center',
   },
-  continueButtonText: {
-    color: 'white',
+  forgotPasswordText: {
     fontSize: 16,
+    color: '#7C3AED',
     fontWeight: '600',
   },
-  loginSection: {
+  signInButton: {
+    backgroundColor: '#7C3AED',
+    borderRadius: 50,
+    padding: 16,
     alignItems: 'center',
-    marginTop: 24,
-    marginBottom: 32,
+    marginTop: 8,
   },
-  loginText: {
-    fontSize: 14,
+  signInButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'white',
+  },
+  signupContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  signupText: {
+    fontSize: 16,
     color: '#666666',
   },
-  loginLink: {
+  signupLink: {
+    fontSize: 16,
     color: '#7C3AED',
     fontWeight: '600',
   },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 32,
+    gap: 16,
+    marginVertical: 24,
   },
-  dividerLine: {
+  divider: {
     flex: 1,
     height: 1,
     backgroundColor: '#E5E7EB',
   },
-  orText: {
-    marginHorizontal: 12,
-    color: '#666666',
+  dividerText: {
     fontSize: 14,
+    color: '#666666',
   },
   socialButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 16,
-    paddingHorizontal: 24,
   },
   socialButton: {
-    width: 100,
-    height: 48,
-    backgroundColor: 'white',
-    borderRadius: 12,
+    width: 120,
+    height: 40,
+    borderRadius: 100,
+    backgroundColor: '#F8F9FA',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
   },
 });
 
-export default SignUpScreen; 
+export default SignInScreen; 

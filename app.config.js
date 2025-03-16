@@ -1,40 +1,43 @@
-module.exports = {
-  expo: {
-    name: 'ai-chatbox',
-    slug: 'ai-chatbox',
-    version: '1.0.0',
-    orientation: 'portrait',
-    icon: './assets/icon.png',
-    userInterfaceStyle: 'light',
-    splash: {
-      image: './assets/splash.png',
-      resizeMode: 'contain',
+export default {
+  name: 'AI Chatbox',
+  slug: 'ai-chatbox',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './assets/favicon.svg',
+  userInterfaceStyle: 'light',
+  splash: {
+    image: './assets/favicon.svg',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff'
+  },
+  assetBundlePatterns: [
+    '**/*'
+  ],
+  ios: {
+    supportsTablet: true,
+    bundleIdentifier: 'com.aichatbox.app'
+  },
+  android: {
+    adaptiveIcon: {
+      foregroundImage: './assets/favicon.svg',
       backgroundColor: '#ffffff'
     },
-    assetBundlePatterns: [
-      '**/*'
-    ],
-    ios: {
-      supportsTablet: true
-    },
-    android: {
-      adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#ffffff'
+    package: 'com.aichatbox.app'
+  },
+  web: {
+    bundler: 'metro',
+    output: 'static',
+    favicon: './assets/favicon.svg',
+    build: {
+      babel: {
+        include: ['@expo/vector-icons', 'expo-router']
       }
     },
-    web: {
-      bundler: 'metro',
-      favicon: './assets/favicon.png',
-      build: {
-        babel: {
-          include: ['@expo/vector-icons', 'expo-router']
-        }
-      }
-    },
-    plugins: [
-      'expo-router'
-    ],
-    scheme: 'ai-chatbox'
-  }
+    publicPath: '/',
+    staticDirectory: './public'
+  },
+  plugins: [
+    'expo-router'
+  ],
+  scheme: 'ai-chatbox'
 }; 
