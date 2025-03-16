@@ -2,8 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const AuthScreen = () => {
+  const router = useRouter();
+
   return (
     <LinearGradient
       colors={['#c2e9fb', '#e6c3f2']}
@@ -21,7 +24,10 @@ const AuthScreen = () => {
               <Text style={styles.loginButtonText}>Log in</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.signupButton}>
+            <TouchableOpacity 
+              style={styles.signupButton}
+              onPress={() => router.push('/auth/signup')}
+            >
               <Text style={styles.signupButtonText}>Sign up</Text>
             </TouchableOpacity>
             
