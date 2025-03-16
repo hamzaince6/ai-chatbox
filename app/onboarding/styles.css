@@ -1,0 +1,37 @@
+.splide__pagination {
+  position: absolute !important;
+  display: flex !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transform: none !important;
+  min-width: 80px !important;
+  bottom: 40px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 10 !important;
+}
+
+.splide__pagination__page {
+  width: 8px !important;
+  height: 8px !important;
+  margin: 0 !important;
+  background-color: #7C3AED !important;
+  opacity: 0.3 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 50% !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.splide__pagination__page.is-active {
+  transform: none !important;
+  background-color: #7C3AED !important;
+  opacity: 1 !important;
+  width: 24px !important;
+  border-radius: 12px !important;
+}
+
+.splide__track {
+  overflow: visible !important;
+}
